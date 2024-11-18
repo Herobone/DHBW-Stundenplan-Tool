@@ -1,40 +1,58 @@
-"use client";
-import { useNextCalendarApp, ScheduleXCalendar } from '@schedule-x/react';
-import {
-  createViewDay,
-  createViewMonthAgenda,
-  createViewMonthGrid,
-  createViewWeek,
-} from '@schedule-x/calendar';
-import { createEventsServicePlugin } from '@schedule-x/events-service';
+'use client';
+import {ScheduleXCalendar, useNextCalendarApp} from '@schedule-x/react';
 import '@schedule-x/theme-default/dist/index.css';
-import { useEffect } from 'react';
+import {createViewDay, createViewWeek} from '@schedule-x/calendar';
+import {createCurrentTimePlugin} from '@schedule-x/current-time';
+import {createEventModalPlugin} from '@schedule-x/event-modal';
+import {CalenderEvent} from '@/components/courseUtil';
 
-function CalendarApp() {
-  const plugins = [createEventsServicePlugin()];
+type ColorDefinition = {
+  main: string;
+  container: string;
+  onContainer: string;
+};
 
+export type CalendarType = {
+  colorName: string;
+  label?: string;
+  darkColors?: ColorDefinition;
+};
+
+function CalendarApp({
+  events,
+  calendars,
+  hasSaturday,
+}: {
+  events: CalenderEvent[];
+  calendars?: Record<string, CalendarType>;
+  hasSaturday?: boolean;
+}) {
   const calendar = useNextCalendarApp({
-    views: [createViewDay(), createViewWeek(), createViewMonthGrid(), createViewMonthAgenda()],
-    events: [
-      {
-        id: '1',
-        title: 'Event 1',
-        start: '2023-12-16',
-        end: '2023-12-16',
-      },
+    views: [createViewDay(), createViewWeek()],
+    events: events,
+    dayBoundaries: {
+      start: '07:00',
+      end: '20:00',
+    },
+    isDark: true,
+    locale: 'de-DE',
+    firstDayOfWeek: 1,
+    weekOptions: {
+      nDays: hasSaturday ? 6 : 5,
+    },
+    calendars: calendars,
+    plugins: [
+      createCurrentTimePlugin({
+        fullWeekWidth: true,
+      }),
+      createEventModalPlugin(),
     ],
-  }, plugins);
-
-  useEffect(() => {
-    if (calendar) {
-      calendar.setTheme('dark');
-    }
-  }, [calendar]);
+  });
 
   return (
-    <div>
+    <>
       <ScheduleXCalendar calendarApp={calendar} />
-    </div>
+    </>
   );
 }
 

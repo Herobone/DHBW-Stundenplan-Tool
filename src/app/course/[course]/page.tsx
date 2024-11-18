@@ -1,22 +1,11 @@
 'use server';
 
-import {ReactElement} from 'react';
-
-interface Event {
-  entityType: string;
-  date: string;
-  site: string;
-  startTime: string;
-  endTime: string;
-  name: string;
-  type: string;
-  lecturer: string;
-  rooms: string[];
-  course: string;
-  id: number;
-}
-
-type JSONEvents = {[key: string]: Event};
+import Calendar from '@/components/Calendar';
+import {Fab, Typography} from '@mui/material';
+import {Add as AddIcon, Delete as DeleteIcon} from '@mui/icons-material';
+import {readCookie, setCookie} from '@/cookieManager';
+import {revalidatePath} from 'next/cache';
+import {getEvents, hasSaturday} from '@/components/courseUtil';
 
 export default async function Course({
   params,
@@ -24,25 +13,60 @@ export default async function Course({
   params: Promise<{course: string}>;
 }) {
   const {course} = await params;
-  const data = await fetch(
-    `https://api.dhbw.app/rapla/lectures/${course}/events`
-  );
-  const json: JSONEvents = await data.json();
+  const coursesFromCookie = await readCookie<string[]>('courses');
+  const courses: string[] = [];
+  if (coursesFromCookie) {
+    courses.push(...coursesFromCookie);
+  }
+  const isSaved = courses.includes(course);
 
-  const items: ReactElement[] = [];
-
-  for (const event of Object.values(json)) {
-    items.push(
-      <div key={event.id}>
-        <h2>{event.name}</h2>
-        <p>{event.lecturer}</p>
-        <p>
-          {event.startTime} - {event.endTime}
-        </p>
-        <p>{event.rooms.join(', ')}</p>
-      </div>
-    );
+  async function handleAddEvent() {
+    'use server';
+    if (!isSaved) {
+      courses.push(course);
+    }
+    await setCookie('courses', courses);
+    revalidatePath('/course/' + course);
   }
 
-  return <div>{items}</div>;
+  async function handleRemoveEvent() {
+    'use server';
+    const newCourses = courses.filter(c => c !== course);
+    await setCookie('courses', newCourses);
+    revalidatePath('/course/' + course);
+  }
+
+  const calendarEvents = await getEvents(course);
+
+  return (
+    <>
+      <Calendar
+        events={calendarEvents}
+        hasSaturday={hasSaturday(calendarEvents)}
+      />
+      {isSaved ? (
+        <Fab
+          color="secondary"
+          variant="extended"
+          aria-label="remove"
+          sx={{position: 'fixed', bottom: 16, right: 16}}
+          onClick={handleRemoveEvent}
+        >
+          <DeleteIcon />
+          <Typography sx={{mr: 1}}>Remove Course</Typography>
+        </Fab>
+      ) : (
+        <Fab
+          color="secondary"
+          variant="extended"
+          aria-label="add"
+          sx={{position: 'fixed', bottom: 16, right: 16}}
+          onClick={handleAddEvent}
+        >
+          <AddIcon />
+          <Typography sx={{mr: 1}}>Add Course</Typography>
+        </Fab>
+      )}
+    </>
+  );
 }
