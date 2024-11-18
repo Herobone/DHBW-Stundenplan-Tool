@@ -1,6 +1,7 @@
 'use client';
 import {
   Box,
+  Divider,
   List,
   ListItemButton,
   ListItemIcon,
@@ -10,12 +11,14 @@ import {
 import {
   Home as HomeIcon,
   Info as InfoIcon,
+  Search as SearchIcon,
   SvgIconComponent,
 } from '@mui/icons-material';
 import React from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {Defaults} from '@/appDefaults';
+import Cookies from 'universal-cookie';
 
 interface IPage {
   name: string;
@@ -34,10 +37,19 @@ const pages: IPage[] = [
     path: '/about',
     icon: InfoIcon,
   },
+  {
+    name: 'Find Course',
+    path: '/course-selector',
+    icon: SearchIcon,
+  },
 ];
 
 export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
   const pathname = usePathname();
+
+  const cookies = new Cookies();
+
+  const courses = cookies.get<string[]>('courses');
 
   return (
     <Box sx={{width: Defaults.drawerWidth - 1}}>
@@ -55,6 +67,21 @@ export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
             </ListItemIcon>
 
             <ListItemText primary={page.name} />
+          </ListItemButton>
+        ))}
+        <Divider sx={{pt: 2, pb: 2}} />
+        <br />
+        {courses.map((course, index) => (
+          <ListItemButton
+            key={index}
+            component={Link}
+            href={`/course/${course}`}
+            selected={pathname === `/course/${course}`}
+          >
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary={course} />
           </ListItemButton>
         ))}
       </List>
