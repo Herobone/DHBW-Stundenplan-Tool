@@ -1,6 +1,7 @@
 import Grid from '@mui/material/Grid2';
-import {Paper, Typography} from '@mui/material';
-import {Defaults} from '@/appDefaults';
+import { Paper, Typography } from '@mui/material';
+import { Defaults } from '@/appDefaults';
+import CalendarApp from "@/components/Calendar"; // Adjust the path as necessary
 
 export default function Home() {
   return (
@@ -19,6 +20,11 @@ export default function Home() {
         </Paper>
       </Grid>
       <Grid size={{xs: 0, sm: 3}} />
+    <Grid size={{ xs: 12 }}>
+        <Paper sx={{ p: 2 }}>
+          <CalendarApp /> {/* Add the CalendarApp component here */}
+        </Paper>
+      </Grid>
     </Grid>
   );
 }
