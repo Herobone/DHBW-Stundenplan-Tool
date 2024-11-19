@@ -6,6 +6,9 @@ import {Add as AddIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {readCookie, setCookie} from '@/cookieManager';
 import {revalidatePath} from 'next/cache';
 import {getEvents, hasSaturday} from '@/components/courseUtil';
+import {cache} from 'react';
+
+const cachedSaturday = cache(hasSaturday);
 
 export default async function Course({
   params,
@@ -45,7 +48,7 @@ export default async function Course({
     <>
       <Calendar
         events={calendarEvents}
-        hasSaturday={hasSaturday(calendarEvents)}
+        hasSaturday={await cachedSaturday(calendarEvents)}
       />
       {isSaved ? (
         <Fab

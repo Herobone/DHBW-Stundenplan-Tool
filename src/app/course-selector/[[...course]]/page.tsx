@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material';
 import FacultySelector from '@/app/course-selector/FacultySelector';
-import React from 'react';
+import React, {cache} from 'react';
 import {
   Faculty,
   FacultySubjects,
@@ -21,8 +21,11 @@ import {
 import SubjectSelector from '../SubjectSelector';
 import YearSelector from '@/app/course-selector/YearSelector';
 import Link from 'next/link';
+import {ExtendedDataFormat, getSubjects} from '@/components/courseUtil';
 
-type ExtendedDataFormat = {[key: string]: {[subj: string]: unknown}};
+const cachedProcessSubjects = cache(processSubjects);
+const cachedGetYears = cache(getYears);
+const cachedGetClasses = cache(getClasses);
 
 function processSubjects(data: ExtendedDataFormat, faculty: Faculty) {
   const subjects: Subject[] = [];
@@ -111,17 +114,6 @@ export default async function CourseSelector({
 }: {
   params: Promise<{course?: string[]}>;
 }) {
-  async function getSubjects(): Promise<ExtendedDataFormat> {
-    'use server';
-    const response = await fetch(
-      'https://api.dhbw.app/courses/MA/mapped/extended',
-      {
-        cache: 'force-cache',
-      }
-    );
-    return response.json();
-  }
-
   const waitedParams = await params;
   const faculty: Faculty | undefined = waitedParams.course?.[0] as Faculty;
   const subject: string | undefined = waitedParams.course?.[1];
@@ -133,13 +125,11 @@ export default async function CourseSelector({
 
   if (faculty) {
     const data = await getSubjects();
-    subjects = processSubjects(data, faculty);
+    subjects = cachedProcessSubjects(data, faculty);
     if (subject) {
-      years = getYears(data, faculty, subject);
-      console.log(years);
+      years = cachedGetYears(data, faculty, subject);
       if (year) {
-        classes = getClasses(data, faculty, subject, year);
-        console.log(classes);
+        classes = cachedGetClasses(data, faculty, subject, year);
       }
     }
   }
