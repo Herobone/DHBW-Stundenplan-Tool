@@ -30,6 +30,6 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags:
-            - Herobone/DHBW-Stundenplan:${{ steps.package-version.outputs.current-version}}
-            - Herobone/DHBW-Stundenplan:latest
+          tags: | 
+            Herobone/DHBW-Stundenplan:${{ steps.package-version.outputs.current-version}}
+            Herobone/DHBW-Stundenplan:latest
