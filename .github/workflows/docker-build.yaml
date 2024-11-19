@@ -31,5 +31,5 @@ jobs:
         with:
           push: true
           tags: | 
-            Herobone/DHBW-Stundenplan:${{ steps.package-version.outputs.current-version}}
-            Herobone/DHBW-Stundenplan:latest
+            herobone/dhbw-stundenplan:${{ steps.package-version.outputs.current-version}}
+            herobone/dhbw-stundenplan:latest
