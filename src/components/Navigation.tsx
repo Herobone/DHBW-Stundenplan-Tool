@@ -71,19 +71,20 @@ export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
         ))}
         <Divider sx={{pt: 2, pb: 2}} />
         <br />
-        {courses.map((course, index) => (
-          <ListItemButton
-            key={index}
-            component={Link}
-            href={`/course/${course}`}
-            selected={pathname === `/course/${course}`}
-          >
-            <ListItemIcon>
-              <SearchIcon />
-            </ListItemIcon>
-            <ListItemText primary={course} />
-          </ListItemButton>
-        ))}
+        {courses &&
+          courses.map((course, index) => (
+            <ListItemButton
+              key={index}
+              component={Link}
+              href={`/course/${course}`}
+              selected={pathname === `/course/${course}`}
+            >
+              <ListItemIcon>
+                <SearchIcon />
+              </ListItemIcon>
+              <ListItemText primary={course} />
+            </ListItemButton>
+          ))}
       </List>
     </Box>
   );

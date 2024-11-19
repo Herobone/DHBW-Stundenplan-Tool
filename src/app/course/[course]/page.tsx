@@ -13,6 +13,9 @@ export default async function Course({
   params: Promise<{course: string}>;
 }) {
   const {course} = await params;
+  if (!course) {
+    return {notFound: true};
+  }
   const coursesFromCookie = await readCookie<string[]>('courses');
   const courses: string[] = [];
   if (coursesFromCookie) {

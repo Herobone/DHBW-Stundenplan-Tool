@@ -1,3 +1,5 @@
+'use server';
+
 export interface CourseEvent {
   entityType: string;
   date: string;
@@ -12,7 +14,7 @@ export interface CourseEvent {
   id: number;
 }
 
-export interface CalenderEvent {
+export interface CalendarEvent {
   id: number;
   start: string;
   end: string;
@@ -23,19 +25,23 @@ export interface CalenderEvent {
   calendarId?: string;
 }
 
+type JSONEvents = {[key: string]: CourseEvent};
+export type ExtendedDataFormat = {[key: string]: {[subj: string]: unknown}};
+
 function fix(num: number): string {
   return num.toString().padStart(2, '0');
 }
 
-type JSONEvents = {[key: string]: CourseEvent};
-
 export async function getEvents(course: string) {
   const data = await fetch(
-    `https://api.dhbw.app/rapla/lectures/${course}/events`
+    `https://api.dhbw.app/rapla/lectures/${course}/events`,
+    {
+      next: {revalidate: 3600},
+    }
   );
   const json: JSONEvents = await data.json();
 
-  const calendarEvents: CalenderEvent[] = [];
+  const calendarEvents: CalendarEvent[] = [];
   for (const event of Object.values(json)) {
     const startTime = new Date(Date.parse(event.startTime));
     const endTime = new Date(Date.parse(event.endTime));
@@ -51,7 +57,18 @@ export async function getEvents(course: string) {
   return calendarEvents;
 }
 
-export function hasSaturday(events: CalenderEvent[]): boolean {
+export async function getSubjects(): Promise<ExtendedDataFormat> {
+  const response = await fetch(
+    'https://api.dhbw.app/courses/MA/mapped/extended',
+    {
+      next: {revalidate: 60 * 60 * 24}, // Revalidate every 24 hours
+      cache: 'force-cache',
+    }
+  );
+  return response.json();
+}
+
+export async function hasSaturday(events: CalendarEvent[]): Promise<boolean> {
   for (const event of events) {
     const start = new Date(event.start);
     if (start.getDay() === 6) {

@@ -4,7 +4,7 @@ import '@schedule-x/theme-default/dist/index.css';
 import {createViewDay, createViewWeek} from '@schedule-x/calendar';
 import {createCurrentTimePlugin} from '@schedule-x/current-time';
 import {createEventModalPlugin} from '@schedule-x/event-modal';
-import {CalenderEvent} from '@/components/courseUtil';
+import {CalendarEvent} from '@/components/courseUtil';
 
 type ColorDefinition = {
   main: string;
@@ -23,7 +23,7 @@ function CalendarApp({
   calendars,
   hasSaturday,
 }: {
-  events: CalenderEvent[];
+  events: CalendarEvent[];
   calendars?: Record<string, CalendarType>;
   hasSaturday?: boolean;
 }) {

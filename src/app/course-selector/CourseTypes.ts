@@ -6,6 +6,7 @@ export interface Subject {
   category: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
 export enum Faculty {
   Technik = 'Technik',
   Wirtschaft = 'Wirtschaft',

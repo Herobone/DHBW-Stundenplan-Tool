@@ -3,7 +3,7 @@ import {Paper, Typography} from '@mui/material';
 import {Defaults} from '@/appDefaults';
 import CalendarApp, {CalendarType} from '@/components/Calendar';
 import {readCookie} from '@/cookieManager';
-import {CalenderEvent, getEvents, hasSaturday} from '@/components/courseUtil';
+import {CalendarEvent, getEvents, hasSaturday} from '@/components/courseUtil';
 import {Color} from '@bluefirex/color-ts';
 import {ReactElement} from 'react'; // Adjust the path as necessary
 
@@ -17,38 +17,40 @@ const mainColor = [
 ];
 
 export default async function Home() {
-  const courses = (await readCookie<string[]>('courses')) ?? [];
-  const events: CalenderEvent[] = [];
-  for (const course of courses) {
-    const courseEvents = await getEvents(course);
-    events.push(...courseEvents);
-  }
-
+  const courses = await readCookie<string[]>('courses');
+  const events: CalendarEvent[] = [];
   const calendarLegend: ReactElement[] = [];
-
   const calendars: Record<string, CalendarType> = {};
-  let courseIndex = 0;
-  for (const course of courses) {
-    calendars[course] = {
-      colorName: course,
-      darkColors: {
-        main: mainColor[courseIndex % mainColor.length],
-        container:
-          '#' +
-          Color.fromHex(mainColor[courseIndex % mainColor.length]).darken(10)
-            .hex,
-        onContainer: '#000000',
-      },
-    };
-    calendarLegend.push(
-      <Typography
-        key={courseIndex}
-        style={{color: mainColor[courseIndex % mainColor.length]}}
-      >
-        {course}
-      </Typography>
-    );
-    courseIndex++;
+
+  if (courses) {
+    for (const course of courses) {
+      const courseEvents = await getEvents(course);
+      events.push(...courseEvents);
+    }
+
+    let courseIndex = 0;
+    for (const course of courses) {
+      calendars[course] = {
+        colorName: course,
+        darkColors: {
+          main: mainColor[courseIndex % mainColor.length],
+          container:
+            '#' +
+            Color.fromHex(mainColor[courseIndex % mainColor.length]).darken(10)
+              .hex,
+          onContainer: '#000000',
+        },
+      };
+      calendarLegend.push(
+        <Typography
+          key={courseIndex}
+          style={{color: mainColor[courseIndex % mainColor.length]}}
+        >
+          {course}
+        </Typography>
+      );
+      courseIndex++;
+    }
   }
 
   return (
@@ -69,7 +71,7 @@ export default async function Home() {
           <CalendarApp
             events={events}
             calendars={calendars}
-            hasSaturday={hasSaturday(events)}
+            hasSaturday={await hasSaturday(events)}
           />{' '}
         </Paper>
       </Grid>
