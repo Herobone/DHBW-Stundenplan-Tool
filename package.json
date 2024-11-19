@@ -14,17 +14,16 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/base": "^5.0.0-beta.61",
-    "@mui/icons-material": "^6.1.6",
-    "@mui/material": "^6.1.6",
-    "@mui/material-nextjs": "^6.1.6",
+    "@mui/icons-material": "^6.1.7",
+    "@mui/material": "^6.1.7",
+    "@mui/material-nextjs": "^6.1.7",
     "@schedule-x/calendar": "^2.6.0",
     "@schedule-x/current-time": "^2.6.0",
     "@schedule-x/event-modal": "^2.6.0",
     "@schedule-x/react": "^2.4.2",
     "@schedule-x/theme-default": "^2.6.0",
-    "next": "15.0.2",
+    "next": "15.0.3",
     "react": "19.0.0-rc-5c56b873-20241107",
-    "react-cookie": "^7.2.2",
     "react-dom": "19.0.0-rc-5c56b873-20241107",
     "universal-cookie": "^7.2.2"
   },
@@ -32,7 +31,7 @@
     "typescript": "^5",
     "@types/node": "^20",
     "@types/bun": "^1.1.13",
-    "@types/react": "^18",
+    "@types/react": "^18.3.12",
     "@types/react-dom": "^18",
     "@types/universal-cookie": "^3.0.0",
     "postcss": "^8",
@@ -40,6 +39,6 @@
     "eslint": "^8",
     "prettier": "^3.3.3",
     "gts": "^5.3.1",
-    "eslint-config-next": "15.0.2"
+    "eslint-config-next": "15.0.3"
   }
 }
