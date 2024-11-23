@@ -1,5 +1,7 @@
 'use server';
 
+import {isoToReadable} from '@/helpers';
+
 export interface CourseEvent {
   entityType: string;
   date: string;
@@ -25,12 +27,8 @@ export interface CalendarEvent {
   calendarId?: string;
 }
 
-type JSONEvents = {[key: string]: CourseEvent};
+export type JSONEvents = {[key: string]: CourseEvent};
 export type ExtendedDataFormat = {[key: string]: {[subj: string]: unknown}};
-
-function fix(num: number): string {
-  return num.toString().padStart(2, '0');
-}
 
 export async function getEvents(course: string) {
   const data = await fetch(
@@ -43,12 +41,10 @@ export async function getEvents(course: string) {
 
   const calendarEvents: CalendarEvent[] = [];
   for (const event of Object.values(json)) {
-    const startTime = new Date(Date.parse(event.startTime));
-    const endTime = new Date(Date.parse(event.endTime));
     calendarEvents.push({
       id: event.id,
-      start: `${startTime.getFullYear()}-${fix(startTime.getMonth() + 1)}-${fix(startTime.getDate())} ${fix(startTime.getHours())}:${fix(startTime.getMinutes())}`,
-      end: `${endTime.getFullYear()}-${fix(endTime.getMonth() + 1)}-${fix(endTime.getDate())} ${fix(endTime.getHours())}:${fix(endTime.getMinutes())}`,
+      start: isoToReadable(event.startTime),
+      end: isoToReadable(event.endTime),
       location: event.rooms.join(', '),
       title: event.name,
       calendarId: course,

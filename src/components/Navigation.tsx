@@ -14,11 +14,11 @@ import {
   Search as SearchIcon,
   SvgIconComponent,
 } from '@mui/icons-material';
-import React from 'react';
+import React, {useEffect} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {Defaults} from '@/appDefaults';
-import Cookies from 'universal-cookie';
+import {readCookie} from '@/cookieManager';
 
 interface IPage {
   name: string;
@@ -42,14 +42,20 @@ const pages: IPage[] = [
     path: '/course-selector',
     icon: SearchIcon,
   },
+  {
+    name: 'DHBW Verzeichnis',
+    path: 'https://dhbw-verzeichnis.ottercloud.net',
+    icon: InfoIcon,
+  },
 ];
 
 export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
   const pathname = usePathname();
+  const [courses, setCourses] = React.useState<string[] | undefined>(undefined);
 
-  const cookies = new Cookies();
-
-  const courses = cookies.get<string[]>('courses');
+  useEffect(() => {
+    readCookie<string[]>('courses').then(setCourses).catch(console.warn);
+  }, []);
 
   return (
     <Box sx={{width: Defaults.drawerWidth - 1}}>

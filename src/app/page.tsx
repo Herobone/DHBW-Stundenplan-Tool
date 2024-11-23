@@ -33,11 +33,12 @@ export default async function Home() {
       calendars[course] = {
         colorName: course,
         darkColors: {
-          main: mainColor[courseIndex % mainColor.length],
+          main: Defaults.mainColor[courseIndex % Defaults.mainColor.length],
           container:
             '#' +
-            Color.fromHex(mainColor[courseIndex % mainColor.length]).darken(10)
-              .hex,
+            Color.fromHex(
+              Defaults.mainColor[courseIndex % Defaults.mainColor.length]
+            ).darken(10).hex,
           onContainer: '#000000',
         },
       };

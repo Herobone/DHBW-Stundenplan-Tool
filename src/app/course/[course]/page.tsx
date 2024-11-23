@@ -6,7 +6,7 @@ import {Add as AddIcon, Delete as DeleteIcon} from '@mui/icons-material';
 import {readCookie, setCookie} from '@/cookieManager';
 import {revalidatePath} from 'next/cache';
 import {getEvents, hasSaturday} from '@/components/courseUtil';
-import {cache} from 'react';
+import React, {cache} from 'react';
 
 const cachedSaturday = cache(hasSaturday);
 
