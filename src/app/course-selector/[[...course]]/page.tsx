@@ -142,6 +142,11 @@ export default async function CourseSelector({
           <Typography variant="h3" gutterBottom>
             Wähle deinen Studiengang
           </Typography>
+          <Typography>
+            {' '}
+            Hier kann der Kurs ausgewählt werden! Von OBEN nach UNTEN ausfüllen
+            bitte!{' '}
+          </Typography>
           <br />
           <FormControl fullWidth>
             <InputLabel>Fakultät</InputLabel>
@@ -149,10 +154,11 @@ export default async function CourseSelector({
           </FormControl>
           <br />
           <Divider />
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{mt: 2, mb: 2}}>
             <InputLabel>Studiengang</InputLabel>
             <SubjectSelector subjects={subjects} faculty={faculty} />
           </FormControl>
+
           <FormControl fullWidth>
             <InputLabel>Jahrgang</InputLabel>
             <YearSelector faculty={faculty} years={years} />
@@ -167,6 +173,10 @@ export default async function CourseSelector({
             <Paper sx={{p: 2}}>
               {classes.map(cls => (
                 <Button
+                  size="large"
+                  sx={{m: 1}} //Abstand für die Buttons yay
+                  variant="contained"
+                  color="success"
                   key={cls.name}
                   component={Link}
                   href={`/course/${cls.name}`}

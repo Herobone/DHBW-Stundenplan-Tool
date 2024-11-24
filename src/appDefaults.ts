@@ -1,5 +1,7 @@
 export const Defaults = {
   appName: 'DHBW Stundenplan',
   drawerWidth: 240,
-  mainColor: ['#9dff00', '#a16211', '#d6107d', '#d19a3a', '#3f51b5', '#2196f3'],
+  mainColor: ['#631212', '#371e73', '#8B4500', '#68228B'],
+  containerColor: ['#991b1b', '#4f378b', '#CD6600', '#9A32CD'],
+  textColor: ['#FFFFFF', '#FFFFFF', '#000000', '#FFFFFF'],
 };

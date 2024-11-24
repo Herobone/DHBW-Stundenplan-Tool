@@ -4,7 +4,6 @@ import {Defaults} from '@/appDefaults';
 import CalendarApp, {CalendarType} from '@/components/Calendar';
 import {readCookie} from '@/cookieManager';
 import {CalendarEvent, getEvents, hasSaturday} from '@/components/courseUtil';
-import {Color} from '@bluefirex/color-ts';
 import {ReactElement} from 'react'; // Adjust the path as necessary
 
 const mainColor = [
@@ -35,11 +34,11 @@ export default async function Home() {
         darkColors: {
           main: Defaults.mainColor[courseIndex % Defaults.mainColor.length],
           container:
-            '#' +
-            Color.fromHex(
-              Defaults.mainColor[courseIndex % Defaults.mainColor.length]
-            ).darken(10).hex,
-          onContainer: '#000000',
+            Defaults.containerColor[
+              courseIndex % Defaults.containerColor.length
+            ],
+          onContainer:
+            Defaults.textColor[courseIndex % Defaults.textColor.length],
         },
       };
       calendarLegend.push(
@@ -64,6 +63,12 @@ export default async function Home() {
         >
           <Typography variant="h3" gutterBottom>
             Willkommen bei der {Defaults.appName} App
+          </Typography>
+          <Typography>
+            Zuerst unter &quot;Find Course&quot; einen Kurs auswählen!
+            <br />
+            Wenn du dort den Kurs speicherst, siehst du ihn hier auf der
+            Homepage!
           </Typography>
         </Paper>
       </Grid>
