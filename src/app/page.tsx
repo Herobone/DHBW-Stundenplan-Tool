@@ -1,24 +1,16 @@
 import Grid from '@mui/material/Grid2';
-import {Paper, Typography} from '@mui/material';
+import {List, Paper, Typography} from '@mui/material';
 import {Defaults} from '@/appDefaults';
-import CalendarApp, {CalendarType} from '@/components/Calendar';
-import {readCookie} from '@/cookieManager';
+import {CalendarType, Calendar} from '@/components/Calendar';
 import {CalendarEvent, getEvents, hasSaturday} from '@/components/courseUtil';
-import {ReactElement} from 'react'; // Adjust the path as necessary
-
-const mainColor = [
-  '#9dff00',
-  '#a16211',
-  '#d6107d',
-  '#d19a3a',
-  '#3f51b5',
-  '#2196f3',
-];
+import {Color} from '@bluefirex/color-ts';
+import CourseListController from '@/components/CourseListController';
+import CalendarLegend from '@/components/CalendarLegend';
+import {readNextCookie} from '@/cookieManager';
 
 export default async function Home() {
-  const courses = await readCookie<string[]>('courses');
+  const courses = await readNextCookie<string[]>('courses');
   const events: CalendarEvent[] = [];
-  const calendarLegend: ReactElement[] = [];
   const calendars: Record<string, CalendarType> = {};
 
   if (courses) {
@@ -41,49 +33,41 @@ export default async function Home() {
             Defaults.textColor[courseIndex % Defaults.textColor.length],
         },
       };
-      calendarLegend.push(
-        <Typography
-          key={courseIndex}
-          style={{color: mainColor[courseIndex % mainColor.length]}}
-        >
-          {course}
-        </Typography>
-      );
       courseIndex++;
     }
   }
 
   return (
     <Grid container spacing={3}>
-      <Grid size={{xs: 12}}>
-        <Paper
-          sx={{
-            p: 2,
-          }}
-        >
-          <Typography variant="h3" gutterBottom>
-            Willkommen bei der {Defaults.appName} App
-          </Typography>
-          <Typography>
-            Zuerst unter &quot;Find Course&quot; einen Kurs auswählen!
-            <br />
-            Wenn du dort den Kurs speicherst, siehst du ihn hier auf der
-            Homepage!
-          </Typography>
-        </Paper>
-      </Grid>
-      <Grid size={{xs: 12, md: 10}}>
-        <Paper sx={{p: 2}}>
-          <CalendarApp
-            events={events}
-            calendars={calendars}
-            hasSaturday={await hasSaturday(events)}
-          />{' '}
-        </Paper>
-      </Grid>
-      <Grid size={{xs: 12, md: 2}}>
-        <Paper sx={{p: 2}}>{calendarLegend}</Paper>
-      </Grid>
+      <CourseListController initialCourses={courses}>
+        <Grid size={{xs: 12}}>
+          <Paper
+            sx={{
+              p: 2,
+            }}
+          >
+            <Typography variant="h3" gutterBottom>
+              Willkommen bei der {Defaults.appName} App
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid size={{xs: 12, md: 10}}>
+          <Paper sx={{p: 2}}>
+            <Calendar
+              events={events}
+              calendars={calendars}
+              hasSaturday={await hasSaturday(events)}
+            />{' '}
+          </Paper>
+        </Grid>
+        <Grid size={{xs: 12, md: 2}}>
+          <Paper>
+            <List>
+              <CalendarLegend courses={courses} />
+            </List>
+          </Paper>
+        </Grid>
+      </CourseListController>
     </Grid>
   );
 }

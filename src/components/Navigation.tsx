@@ -14,11 +14,11 @@ import {
   Search as SearchIcon,
   SvgIconComponent,
 } from '@mui/icons-material';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Link from 'next/link';
 import {usePathname} from 'next/navigation';
 import {Defaults} from '@/appDefaults';
-import {readCookie} from '@/cookieManager';
+import {useCookies} from 'react-cookie';
 
 interface IPage {
   name: string;
@@ -51,11 +51,12 @@ const pages: IPage[] = [
 
 export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
   const pathname = usePathname();
-  const [courses, setCourses] = React.useState<string[] | undefined>(undefined);
+  const [cookies] = useCookies<'courses', {courses: string[]}>(['courses']);
+  const [courses, setCourses] = useState<string[]>([]);
 
   useEffect(() => {
-    readCookie<string[]>('courses').then(setCourses).catch(console.warn);
-  }, []);
+    if (cookies.courses) setCourses(cookies.courses);
+  }, [cookies.courses]);
 
   return (
     <Box sx={{width: Defaults.drawerWidth - 1}}>
@@ -77,20 +78,19 @@ export default function Navigation({isMobile = false}: {isMobile?: boolean}) {
         ))}
         <Divider sx={{pt: 2, pb: 2}} />
         <br />
-        {courses &&
-          courses.map((course, index) => (
-            <ListItemButton
-              key={index}
-              component={Link}
-              href={`/course/${course}`}
-              selected={pathname === `/course/${course}`}
-            >
-              <ListItemIcon>
-                <SearchIcon />
-              </ListItemIcon>
-              <ListItemText primary={course} />
-            </ListItemButton>
-          ))}
+        {courses.map((course, index) => (
+          <ListItemButton
+            key={index}
+            component={Link}
+            href={`/course/${course}`}
+            selected={pathname === `/course/${course}`}
+          >
+            <ListItemIcon>
+              <SearchIcon />
+            </ListItemIcon>
+            <ListItemText primary={course} />
+          </ListItemButton>
+        ))}
       </List>
     </Box>
   );

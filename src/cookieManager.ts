@@ -1,7 +1,7 @@
 'use server';
 import {cookies} from 'next/headers';
 
-export async function setCookie<T>(name: string, data: T) {
+export async function setNextCookie<T>(name: string, data: T) {
   const cookieStore = await cookies();
 
   cookieStore.set(name, JSON.stringify(data), {
@@ -10,7 +10,7 @@ export async function setCookie<T>(name: string, data: T) {
   });
 }
 
-export async function readCookie<T>(name: string): Promise<T | undefined> {
+export async function readNextCookie<T>(name: string): Promise<T | undefined> {
   const cookieStore = await cookies();
   const cookie = cookieStore.get(name);
 

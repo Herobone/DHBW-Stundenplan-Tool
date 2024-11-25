@@ -13,6 +13,8 @@ import {
 import theme from '@/theme';
 import {Roboto} from 'next/font/google';
 import {Defaults} from '@/appDefaults';
+import {CookiesProvider} from 'react-cookie';
+import WrappedCookiesProvider from '@/components/WrappedCookiesProvider';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -50,21 +52,25 @@ export default function RootLayout({
         <AppRouterCacheProvider options={{enableCssLayer: true}}>
           <StyledEngineProvider>
             <ThemeProvider theme={theme}>
-              <Box sx={{display: 'flex'}}>
-                <CssBaseline />
-                <AppHeader />
-                <Box
-                  component="main"
-                  sx={{
-                    flexGrow: 1,
-                    p: 3,
-                    width: {sm: `calc(100% - ${Defaults.drawerWidth}px)`},
-                  }}
-                >
-                  <Toolbar />
-                  {children}
+              <WrappedCookiesProvider
+                defaultSetOptions={{secure: true, sameSite: 'lax', path: '/'}}
+              >
+                <Box sx={{display: 'flex'}}>
+                  <CssBaseline />
+                  <AppHeader />
+                  <Box
+                    component="main"
+                    sx={{
+                      flexGrow: 1,
+                      p: 3,
+                      width: {sm: `calc(100% - ${Defaults.drawerWidth}px)`},
+                    }}
+                  >
+                    <Toolbar />
+                    {children}
+                  </Box>
                 </Box>
-              </Box>
+              </WrappedCookiesProvider>
             </ThemeProvider>
           </StyledEngineProvider>
         </AppRouterCacheProvider>

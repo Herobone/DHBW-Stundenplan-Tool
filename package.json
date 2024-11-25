@@ -24,6 +24,7 @@
     "@schedule-x/theme-default": "^2.6.0",
     "next": "15.0.3",
     "react": "19.0.0-rc-5c56b873-20241107",
+    "react-cookie": "^7.2.2",
     "react-dom": "19.0.0-rc-5c56b873-20241107",
     "universal-cookie": "^7.2.2"
   },
