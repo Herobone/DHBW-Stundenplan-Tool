@@ -3,7 +3,6 @@ import {List, Paper, Typography} from '@mui/material';
 import {Defaults} from '@/appDefaults';
 import {CalendarType, Calendar} from '@/components/Calendar';
 import {CalendarEvent, getEvents, hasSaturday} from '@/components/courseUtil';
-import {Color} from '@bluefirex/color-ts';
 import CourseListController from '@/components/CourseListController';
 import CalendarLegend from '@/components/CalendarLegend';
 import {readNextCookie} from '@/cookieManager';
@@ -48,6 +47,12 @@ export default async function Home() {
           >
             <Typography variant="h3" gutterBottom>
               Willkommen bei der {Defaults.appName} App
+            </Typography>
+            <Typography>
+              Zuerst unter &quot;Find Course&quot; einen Kurs auswählen!
+              <br />
+              Wenn du dort den Kurs speicherst, siehst du ihn hier auf der
+              Homepage!
             </Typography>
           </Paper>
         </Grid>

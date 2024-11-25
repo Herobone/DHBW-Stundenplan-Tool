@@ -48,7 +48,9 @@ export default function CalendarLegend({courses}: {courses?: string[]}) {
               key={course}
               style={{
                 color:
-                  Defaults.mainColor[courseIndex % Defaults.mainColor.length],
+                  Defaults.containerColor[
+                    courseIndex % Defaults.containerColor.length
+                  ],
               }}
             >
               {course.replace(/MA-/g, '')}

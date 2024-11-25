@@ -1,9 +1,9 @@
 'use server';
 
-import {Calendar} from '@/components/Calendar';
 import {getEvents, hasSaturday} from '@/components/courseUtil';
 import React, {cache} from 'react';
 import PageOverlay from '@/app/course/[course]/PageOverlay';
+import SingleCalendar from '@/components/SingleCalendar';
 
 const cachedSaturday = cache(hasSaturday);
 
@@ -21,7 +21,7 @@ export default async function Course({
 
   return (
     <>
-      <Calendar
+      <SingleCalendar
         events={calendarEvents}
         hasSaturday={await cachedSaturday(calendarEvents)}
       />
