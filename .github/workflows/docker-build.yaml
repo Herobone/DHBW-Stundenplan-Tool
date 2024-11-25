@@ -4,7 +4,7 @@ on:
   push:
 
 env:
-  IMAGE_NAME: dhbw-stundenplan
+  IMAGE_NAME: herobone/dhbw-stundenplan
 
 jobs:
   docker:
