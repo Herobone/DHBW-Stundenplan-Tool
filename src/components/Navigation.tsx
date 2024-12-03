@@ -20,6 +20,10 @@ const pages: IPage[] = [{
     name: 'About',
     path: '/about',
     icon: InfoIcon
+}, {
+    name: 'Fahrplan',
+    path: '/fahrplan',
+    icon: InfoIcon
 }];
 
 export default function Navigation({isMobile = false}: { isMobile?: boolean }) {
