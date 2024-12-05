@@ -11,13 +11,7 @@ import {
 } from '@mui/material';
 import FacultySelector from '@/app/course-selector/FacultySelector';
 import React, {cache} from 'react';
-import {
-  Faculty,
-  FacultySubjects,
-  Subject,
-  SubjectData,
-  SubjectJson,
-} from '../CourseTypes';
+import {Faculty, Subject, SubjectData, SubjectJson} from '../CourseTypes';
 import SubjectSelector from '../SubjectSelector';
 import YearSelector from '@/app/course-selector/YearSelector';
 import Link from 'next/link';
