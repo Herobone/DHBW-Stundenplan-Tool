@@ -45,16 +45,7 @@ function processSubjects(data: ExtendedDataFormat, faculty: Faculty) {
     }
   }
 
-  const technik = subjects.filter(
-    subject => subject.faculty === Faculty.Technik
-  );
-  const economy = subjects.filter(
-    subject => subject.faculty === Faculty.Wirtschaft
-  );
-  const health = subjects.filter(
-    subject => subject.faculty === Faculty.Gesundheit
-  );
-  return {Gesundheit: health, Technik: technik, Wirtschaft: economy};
+  return subjects;
 }
 
 function getYears(data: ExtendedDataFormat, faculty: Faculty, subject: string) {
@@ -120,7 +111,7 @@ export default async function CourseSelector({
   const year: string | undefined = waitedParams.course?.[2];
 
   let years: number[] = [];
-  let subjects: FacultySubjects | undefined;
+  let subjects: Subject[] | undefined;
   let classes: SubjectData[] = [];
 
   if (faculty) {
