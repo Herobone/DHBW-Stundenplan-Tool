@@ -1,9 +1,9 @@
-'use server';
-
 import {getEvents, hasSaturday} from '@/components/courseUtil';
 import React, {cache} from 'react';
 import PageOverlay from '@/app/course/[course]/PageOverlay';
-import SingleCalendar from '@/components/SingleCalendar';
+import {Calendar, CalendarType} from '@/components/Calendar';
+import {Defaults} from '@/appDefaults';
+import CourseListController from '@/components/CourseListController';
 
 const cachedSaturday = cache(hasSaturday);
 
@@ -19,13 +19,27 @@ export default async function Course({
 
   const calendarEvents = await getEvents(course);
 
+  const calendars: Record<string, CalendarType> = {};
+
+  calendars[calendarEvents[0].calendarId!] = {
+    colorName: calendarEvents[0].calendarId!,
+    darkColors: {
+      main: Defaults.mainColor[0],
+      container: Defaults.containerColor[0],
+      onContainer: Defaults.textColor[0],
+    },
+  };
+
   return (
     <>
-      <SingleCalendar
-        events={calendarEvents}
-        hasSaturday={await cachedSaturday(calendarEvents)}
-      />
-      <PageOverlay course={course} />
+      <CourseListController initialCourses={[course]}>
+        <Calendar
+          events={calendarEvents}
+          hasSaturday={await cachedSaturday(calendarEvents)}
+          calendars={calendars}
+        />
+        <PageOverlay course={course} />
+      </CourseListController>
     </>
   );
 }
